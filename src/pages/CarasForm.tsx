@@ -27,6 +27,33 @@ const formatTodayShortDate = () => {
     const yy = String(d.getFullYear()).slice(-2)
     return `${dd}/${mm}/${yy}`
 }
+const getCurrentYearShort = () => new Date().getFullYear().toString().slice(-2)
+const normalizeFlexibleDate = (raw: string): string => {
+    const value = raw.trim()
+    if (!value) return ''
+    const digits = value.replace(/\D/g, '')
+    const year = getCurrentYearShort()
+    const pad2 = (part: string) => part.padStart(2, '0').slice(-2)
+    const build = (d: string, m: string, y: string = year) => `${pad2(d)}/${pad2(m)}/${pad2(y)}`
+
+    if (value.includes('/')) {
+        const [d = '', m = '', yRaw = ''] = value.split('/').map((part) => part.trim())
+        if (!d || !m) return value
+        let yy = yRaw.replace(/\D/g, '')
+        if (yy.length === 4) yy = yy.slice(-2)
+        if (yy.length === 1) yy = `0${yy}`
+        if (!yy) yy = year
+        return build(d, m, yy)
+    }
+
+    if (digits.length === 2) return build(digits[0], digits[1])
+    if (digits.length === 3) return build(digits[0], digits.slice(1, 3))
+    if (digits.length === 4) return build(digits.slice(0, 2), digits.slice(2, 4))
+    if (digits.length === 5) return build(digits[0], digits.slice(1, 3), digits.slice(3, 5))
+    if (digits.length === 6) return build(digits.slice(0, 2), digits.slice(2, 4), digits.slice(4, 6))
+    if (digits.length >= 8) return build(digits.slice(0, 2), digits.slice(2, 4), digits.slice(6, 8))
+    return value
+}
 
 const initialState = (): CarasPayload => ({
     muestra: '',
@@ -299,11 +326,12 @@ export default function CarasForm() {
         />
     )
 
-    const renderTextInput = (key: keyof CarasPayload, placeholder = '', extraClass = '') => (
+    const renderTextInput = (key: keyof CarasPayload, placeholder = '', extraClass = '', onBlur?: () => void) => (
         <input
             type="text"
             value={String(form[key] ?? '')}
             onChange={(e) => setField(key, e.target.value as CarasPayload[typeof key])}
+            onBlur={onBlur}
             autoComplete="off"
             data-lpignore="true"
             placeholder={placeholder}
@@ -349,7 +377,7 @@ export default function CarasForm() {
                         <div className="grid grid-cols-4 border-b border-[#4b4b4b]">
                             <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('muestra', 'Muestra')}</div>
                             <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('numero_ot', 'N° OT')}</div>
-                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('fecha_ensayo', 'DD/MM/AA')}</div>
+                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('fecha_ensayo', 'DD/MM/AA', '', () => setField('fecha_ensayo', normalizeFlexibleDate(String(form.fecha_ensayo ?? ''))))}</div>
                             <div className="p-1">{renderTextInput('realizado_por', 'Realizado por')}</div>
                         </div>
 
@@ -562,13 +590,13 @@ export default function CarasForm() {
                                 <p className="mb-1 text-[12px] font-semibold">Revisado:</p>
                                 <div className="mb-1">{renderSelect('revisado_por', REVISADO)}</div>
                                 <p className="mb-1 text-[12px] font-semibold">Fecha:</p>
-                                {renderTextInput('revisado_fecha', 'DD/MM/AA')}
+                                {renderTextInput('revisado_fecha', 'DD/MM/AA', '', () => setField('revisado_fecha', normalizeFlexibleDate(String(form.revisado_fecha ?? ''))))}
                             </div>
                             <div className="border border-[#4b4b4b] p-2">
                                 <p className="mb-1 text-[12px] font-semibold">Aprobado:</p>
                                 <div className="mb-1">{renderSelect('aprobado_por', APROBADO)}</div>
                                 <p className="mb-1 text-[12px] font-semibold">Fecha:</p>
-                                {renderTextInput('aprobado_fecha', 'DD/MM/AA')}
+                                {renderTextInput('aprobado_fecha', 'DD/MM/AA', '', () => setField('aprobado_fecha', normalizeFlexibleDate(String(form.aprobado_fecha ?? ''))))}
                             </div>
                         </div>
 
