@@ -20,11 +20,18 @@ const NOTE_2 =
 const NOTE_3 =
     '(***) El porcentaje de la particula mas grande no representara mas de 1% de masa de muestra de ensayo o la muestra sera tan grande como se indica en la tabla 1, lo que sea menor.'
 const NOTE_4 = '(****) Dato registrado solo para metodo fraccionado.'
+const formatTodayShortDate = () => {
+    const d = new Date()
+    const dd = String(d.getDate()).padStart(2, '0')
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const yy = String(d.getFullYear()).slice(-2)
+    return `${dd}/${mm}/${yy}`
+}
 
 const initialState = (): CarasPayload => ({
     muestra: '',
     numero_ot: '',
-    fecha_ensayo: '',
+    fecha_ensayo: formatTodayShortDate(),
     realizado_por: '',
     metodo_determinacion: 'MASA',
     tamano_maximo_nominal_in: '',
@@ -58,9 +65,9 @@ const initialState = (): CarasPayload => ({
     tamiz_especificado_codigo: 'INS-0053',
     nota: '',
     revisado_por: '-',
-    revisado_fecha: '',
+    revisado_fecha: formatTodayShortDate(),
     aprobado_por: '-',
-    aprobado_fecha: '',
+    aprobado_fecha: formatTodayShortDate(),
 })
 
 const parseNum = (raw: string): number | null => {
