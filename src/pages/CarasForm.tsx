@@ -58,7 +58,7 @@ const normalizeFlexibleDate = (raw: string): string => {
 const initialState = (): CarasPayload => ({
     muestra: '',
     numero_ot: '',
-    fecha_ensayo: formatTodayShortDate(),
+    fecha_ensayo: '',
     realizado_por: '',
     metodo_determinacion: 'MASA',
     tamano_maximo_nominal_in: '',
