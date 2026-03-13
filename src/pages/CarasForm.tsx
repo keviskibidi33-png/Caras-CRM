@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { Download, Loader2, Trash2 } from 'lucide-react'
 import { getCarasEnsayoDetail, saveAndDownloadCarasExcel, saveCarasEnsayo } from '@/services/api'
 import type { CarasPayload } from '@/types'
+import FormatConfirmModal from '../components/FormatConfirmModal'
 
 const DRAFT_KEY = 'caras_form_draft_v1'
 const DEBOUNCE_MS = 700
@@ -94,9 +95,9 @@ const initialState = (): CarasPayload => ({
     cuarteador_codigo: '-',
     nota: '',
     revisado_por: '-',
-    revisado_fecha: formatTodayShortDate(),
+    revisado_fecha: '',
     aprobado_por: '-',
-    aprobado_fecha: formatTodayShortDate(),
+    aprobado_fecha: '',
 })
 
 const parseNum = (raw: string): number | null => {
@@ -141,15 +142,6 @@ const formatDisplay = (value: number | null): string => {
 const INPUT_BASE_CLASS =
     'caras-input h-7 w-full border border-[#4b4b4b] bg-white px-1.5 text-[12px] text-black outline-none focus:ring-1 focus:ring-black'
 
-function MarkOption({
-    active,
-    label,
-    onClick,
-}: {
-    active: boolean
-    label: string
-    onClick: () => void
-}) {
 const MarkOption = ({ active, label, onClick }: { active: boolean, label: string, onClick: () => void }) => (
     <div className="flex items-center gap-2 cursor-pointer group" onClick={onClick}>
         <div className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors ${active ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300 group-hover:border-blue-400'}`}>
@@ -257,6 +249,8 @@ export default function CarasForm() {
         localStorage.removeItem(`${DRAFT_KEY}:${editingEnsayoId ?? 'new'}`)
         setForm(initialState())
     }, [editingEnsayoId])
+    const [pendingFormatAction, setPendingFormatAction] = useState<boolean | null>(null)
+
 
     const save = useCallback(
         async (download: boolean) => {
@@ -635,7 +629,7 @@ export default function CarasForm() {
                         Limpiar
                     </button>
                     <button
-                        onClick={() => void save(false)}
+                        onClick={() => setPendingFormatAction(false)}
                         disabled={loading}
                         type="button"
                         className="h-10 border border-[#4b4b4b] bg-white text-[12px] font-semibold text-black hover:bg-[#f2f2f2] disabled:opacity-60"
@@ -643,7 +637,7 @@ export default function CarasForm() {
                         {loading ? 'Guardando...' : 'Guardar'}
                     </button>
                     <button
-                        onClick={() => void save(true)}
+                        onClick={() => setPendingFormatAction(true)}
                         disabled={loading}
                         type="button"
                         className="flex h-10 items-center justify-center gap-1.5 border border-[#4b4b4b] bg-black text-[12px] font-semibold text-white hover:bg-[#1f1f1f] disabled:opacity-60"
@@ -662,6 +656,19 @@ export default function CarasForm() {
                     </button>
                 </div>
             </div>
+            <FormatConfirmModal
+                open={pendingFormatAction !== null}
+                formatLabel={`Formato N-xxxx-AG-${new Date().getFullYear().toString().slice(-2)} CARAS`}
+                actionLabel={pendingFormatAction ? 'Guardar y Descargar' : 'Guardar'}
+                onClose={() => setPendingFormatAction(null)}
+                onConfirm={() => {
+                    if (pendingFormatAction === null) return
+                    const shouldDownload = pendingFormatAction
+                    setPendingFormatAction(null)
+                    void save(shouldDownload)
+                }}
+            />
+
         </div>
     )
 }
