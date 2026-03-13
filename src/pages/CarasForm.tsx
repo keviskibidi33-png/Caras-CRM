@@ -61,7 +61,7 @@ const initialState = (): CarasPayload => ({
     numero_ot: '',
     fecha_ensayo: '',
     realizado_por: '',
-    metodo_determinacion: 'MASA',
+    metodo_determinacion: null,
     tamano_maximo_nominal_in: '',
     tamiz_especificado_in: '',
     fraccionada: null,
@@ -88,10 +88,10 @@ const initialState = (): CarasPayload => ({
     fraccion_dos_p_porcentaje_pct: null,
     promedio_ponderado_una_pct: null,
     promedio_ponderado_dos_pct: null,
-    horno_codigo: 'EQP-0049',
-    balanza_01g_codigo: 'EQP-0046',
-    tamiz_especificado_codigo: 'INS-0053',
-    cuarteador_codigo: 'EQP-0078',
+    horno_codigo: '-',
+    balanza_01g_codigo: '-',
+    tamiz_especificado_codigo: '-',
+    cuarteador_codigo: '-',
     nota: '',
     revisado_por: '-',
     revisado_fecha: formatTodayShortDate(),
@@ -150,20 +150,14 @@ function MarkOption({
     label: string
     onClick: () => void
 }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className="flex items-center gap-1 text-[11px] leading-none text-black"
-            aria-pressed={active}
-        >
-            <span className="flex h-4 w-4 items-center justify-center border border-black text-[11px] font-bold">
-                {active ? 'X' : ''}
-            </span>
-            <span>{label}</span>
-        </button>
-    )
-}
+const MarkOption = ({ active, label, onClick }: { active: boolean, label: string, onClick: () => void }) => (
+    <div className="flex items-center gap-2 cursor-pointer group" onClick={onClick}>
+        <div className={`w-5 h-5 border-2 rounded flex items-center justify-center transition-colors ${active ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300 group-hover:border-blue-400'}`}>
+            {active && <span className="text-white text-xs font-bold">X</span>}
+        </div>
+        <span className="text-sm font-medium text-slate-700">{label}</span>
+    </div>
+)
 
 export default function CarasForm() {
     const [form, setForm] = useState<CarasPayload>(() => initialState())
