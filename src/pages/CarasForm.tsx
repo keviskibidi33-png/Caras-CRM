@@ -6,6 +6,19 @@ import { getCarasEnsayoDetail, saveAndDownloadCarasExcel, saveCarasEnsayo } from
 import type { CarasPayload } from '@/types'
 import FormatConfirmModal from '../components/FormatConfirmModal'
 
+
+const buildFormatPreview = (sampleCode: string | undefined, materialCode: 'SU' | 'AG', ensayo: string) => {
+    const currentYear = new Date().getFullYear().toString().slice(-2)
+    const normalized = (sampleCode || '').trim().toUpperCase()
+    const fullMatch = normalized.match(/^(\d+)(?:-[A-Z0-9. ]+)?-(\d{2,4})$/)
+    const partialMatch = normalized.match(/^(\d+)(?:-(\d{2,4}))?$/)
+    const match = fullMatch || partialMatch
+    const numero = match?.[1] || 'xxxx'
+    const year = (match?.[2] || currentYear).slice(-2)
+    return `Formato N-${numero}-${materialCode}-${year} ${ensayo}`
+}
+
+
 const DRAFT_KEY = 'caras_form_draft_v1'
 const DEBOUNCE_MS = 700
 
@@ -273,11 +286,11 @@ export default function CarasForm() {
                 }
 
                 if (download) {
-                    const { blob } = await saveAndDownloadCarasExcel(payload, editingEnsayoId ?? undefined)
+                    const { blob, filename } = await saveAndDownloadCarasExcel(payload, editingEnsayoId ?? undefined)
                     const url = URL.createObjectURL(blob)
                     const a = document.createElement('a')
                     a.href = url
-                    a.download = `CARAS_${payload.numero_ot}_${new Date().toISOString().slice(0, 10)}.xlsx`
+                    a.download = filename || `${buildFormatPreview(form.muestra, 'AG', 'CARAS')}.xlsx`
                     a.click()
                     URL.revokeObjectURL(url)
                 } else {
@@ -658,7 +671,7 @@ export default function CarasForm() {
             </div>
             <FormatConfirmModal
                 open={pendingFormatAction !== null}
-                formatLabel={`Formato N-xxxx-AG-${new Date().getFullYear().toString().slice(-2)} CARAS`}
+                formatLabel={buildFormatPreview(form.muestra, 'AG', 'CARAS')}
                 actionLabel={pendingFormatAction ? 'Guardar y Descargar' : 'Guardar'}
                 onClose={() => setPendingFormatAction(null)}
                 onConfirm={() => {
