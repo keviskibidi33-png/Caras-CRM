@@ -456,6 +456,13 @@ export default function CarasForm() {
                                 <div className="px-2 py-1 text-[11px] leading-tight">
                                     <p className="text-center">Tabla peso minimo</p>
                                     <p className="text-center">Fuente: Norma ASTM D5821-13 (Reapproved 2025)</p>
+                                    <div className="mt-2 flex justify-center">
+                                        <img
+                                            src="/caras-ref.png"
+                                            alt="Tabla peso minimo ASTM D5821"
+                                            className="w-[170px] border border-[#4b4b4b] bg-white"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
