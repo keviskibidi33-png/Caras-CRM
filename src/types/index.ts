@@ -40,6 +40,7 @@ export interface CarasPayload {
     horno_codigo?: string | null
     balanza_01g_codigo?: string | null
     tamiz_especificado_codigo?: string | null
+    cuarteador_codigo?: string | null
 
     nota?: string | null
     revisado_por?: string | null

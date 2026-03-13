@@ -10,7 +10,8 @@ const DEBOUNCE_MS = 700
 
 const EQ_HORNO = ['-', 'EQP-0049'] as const
 const EQ_BALANZA = ['-', 'EQP-0046'] as const
-const EQ_TAMIZ = ['-', 'INS-0053', 'INS-0052', 'INS-0050'] as const
+const EQ_TAMIZ = ['-', 'INS-0053', 'INS-0053 y INS-0052'] as const
+const EQ_CUARTEADOR = ['-', 'EQP-0078'] as const
 const REVISADO = ['-', 'FABIAN LA ROSA'] as const
 const APROBADO = ['-', 'IRMA COAQUIRA'] as const
 
@@ -90,6 +91,7 @@ const initialState = (): CarasPayload => ({
     horno_codigo: 'EQP-0049',
     balanza_01g_codigo: 'EQP-0046',
     tamiz_especificado_codigo: 'INS-0053',
+    cuarteador_codigo: 'EQP-0078',
     nota: '',
     revisado_por: '-',
     revisado_fecha: formatTodayShortDate(),
@@ -390,79 +392,91 @@ export default function CarasForm() {
 
                         <div className="grid grid-cols-[3fr_2fr] border-b border-[#4b4b4b]">
                             <div className="border-r border-[#4b4b4b]">
-                                <div className="border-b border-[#4b4b4b] px-2 py-1 text-[13px] font-bold">
-                                    INFORMACION DEL ENSAYO (Marcar "X")
-                                </div>
-                                <div className="grid grid-cols-[2fr_1fr_1fr] border-b border-[#4b4b4b]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">
-                                        Metodo para la determinacion del porcentaje de particulas fracturadas
+                                <div className="border-b border-[#4b4b4b]">
+                                    <div className="border-b border-[#4b4b4b] px-2 py-1 text-center text-[13px] font-bold">
+                                        Codigo equipos utilizados
                                     </div>
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1">
-                                        <MarkOption
-                                            label="Masa"
-                                            active={form.metodo_determinacion !== 'RECUENTO'}
-                                            onClick={() => setField('metodo_determinacion', 'MASA')}
-                                        />
+                                    <div className="grid grid-cols-[1.4fr_1.6fr] border-b border-[#4b4b4b]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Horno</div>
+                                        <div className="p-1">{renderSelect('horno_codigo', EQ_HORNO)}</div>
                                     </div>
-                                    <div className="px-2 py-1">
-                                        <MarkOption
-                                            label="Recuento"
-                                            active={form.metodo_determinacion === 'RECUENTO'}
-                                            onClick={() => setField('metodo_determinacion', 'RECUENTO')}
-                                        />
+                                    <div className="grid grid-cols-[1.4fr_1.6fr] border-b border-[#4b4b4b]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Balanza 0.1 g</div>
+                                        <div className="p-1">{renderSelect('balanza_01g_codigo', EQ_BALANZA)}</div>
+                                    </div>
+                                    <div className="grid grid-cols-[1.4fr_1.6fr] border-b border-[#4b4b4b]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Tamiz especificado</div>
+                                        <div className="p-1">{renderSelect('tamiz_especificado_codigo', EQ_TAMIZ)}</div>
+                                    </div>
+                                    <div className="grid grid-cols-[1.4fr_1.6fr]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Cuarteador</div>
+                                        <div className="p-1">{renderSelect('cuarteador_codigo', EQ_CUARTEADOR)}</div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-[2fr_2fr] border-b border-[#4b4b4b]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Tamano Maximo Nominal (in)</div>
-                                    <div className="p-1">{renderTextInput('tamano_maximo_nominal_in')}</div>
-                                </div>
-                                <div className="grid grid-cols-[2fr_2fr] border-b border-[#4b4b4b]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Tamiz especificado (in) (*)</div>
-                                    <div className="p-1">{renderTextInput('tamiz_especificado_in')}</div>
-                                </div>
-                                <div className="grid grid-cols-[2fr_1fr_1fr]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Fraccionada (**)</div>
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1">
-                                        <MarkOption
-                                            label="SI"
-                                            active={form.fraccionada === true}
-                                            onClick={() => setField('fraccionada', form.fraccionada === true ? null : true)}
-                                        />
+
+                                <div className="border-t border-[#4b4b4b]">
+                                    <div className="border-b border-[#4b4b4b] px-2 py-1 text-[13px] font-bold">
+                                        INFORMACION DEL ENSAYO (Marcar "X")
                                     </div>
-                                    <div className="px-2 py-1">
-                                        <MarkOption
-                                            label="NO"
-                                            active={form.fraccionada === false}
-                                            onClick={() => setField('fraccionada', form.fraccionada === false ? null : false)}
-                                        />
+                                    <div className="grid grid-cols-[2fr_1fr_1fr] border-b border-[#4b4b4b]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">
+                                            Metodo para la determinacion del porcentaje de particulas fracturadas
+                                        </div>
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1">
+                                            <MarkOption
+                                                label="Masa"
+                                                active={form.metodo_determinacion !== 'RECUENTO'}
+                                                onClick={() => setField('metodo_determinacion', 'MASA')}
+                                            />
+                                        </div>
+                                        <div className="px-2 py-1">
+                                            <MarkOption
+                                                label="Recuento"
+                                                active={form.metodo_determinacion === 'RECUENTO'}
+                                                onClick={() => setField('metodo_determinacion', 'RECUENTO')}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-[2fr_2fr] border-b border-[#4b4b4b]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Tamano Maximo Nominal (in)</div>
+                                        <div className="p-1">{renderTextInput('tamano_maximo_nominal_in')}</div>
+                                    </div>
+                                    <div className="grid grid-cols-[2fr_2fr] border-b border-[#4b4b4b]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Tamiz especificado (in) (*)</div>
+                                        <div className="p-1">{renderTextInput('tamiz_especificado_in')}</div>
+                                    </div>
+                                    <div className="grid grid-cols-[2fr_1fr_1fr]">
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Fraccionada (**)</div>
+                                        <div className="border-r border-[#4b4b4b] px-2 py-1">
+                                            <MarkOption
+                                                label="SI"
+                                                active={form.fraccionada === true}
+                                                onClick={() => setField('fraccionada', form.fraccionada === true ? null : true)}
+                                            />
+                                        </div>
+                                        <div className="px-2 py-1">
+                                            <MarkOption
+                                                label="NO"
+                                                active={form.fraccionada === false}
+                                                onClick={() => setField('fraccionada', form.fraccionada === false ? null : false)}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <div className="border-b border-[#4b4b4b] px-2 py-1 text-center text-[13px] font-bold">Codigo equipos utilizados</div>
-                                <div className="grid grid-cols-[1.4fr_1.6fr] border-b border-[#4b4b4b]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Horno</div>
-                                    <div className="p-1">{renderSelect('horno_codigo', EQ_HORNO)}</div>
+                            <div className="bg-white">
+                                <div className="h-2 w-full bg-black" />
+                                <div className="px-3 py-2 text-[11px] leading-tight text-center">
+                                    <p className="font-semibold">Tabla peso minimo</p>
+                                    <p>Fuente: Norma ASTM D5821-13 (Reapproved 2025)</p>
                                 </div>
-                                <div className="grid grid-cols-[1.4fr_1.6fr] border-b border-[#4b4b4b]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Balanza 0.1 g</div>
-                                    <div className="p-1">{renderSelect('balanza_01g_codigo', EQ_BALANZA)}</div>
-                                </div>
-                                <div className="grid grid-cols-[1.4fr_1.6fr] border-b border-[#4b4b4b]">
-                                    <div className="border-r border-[#4b4b4b] px-2 py-1 text-[12px]">Tamiz especificado</div>
-                                    <div className="p-1">{renderSelect('tamiz_especificado_codigo', EQ_TAMIZ)}</div>
-                                </div>
-                                <div className="px-2 py-1 text-[11px] leading-tight">
-                                    <p className="text-center">Tabla peso minimo</p>
-                                    <p className="text-center">Fuente: Norma ASTM D5821-13 (Reapproved 2025)</p>
-                                    <div className="mt-2 flex justify-center">
-                                        <img
-                                            src="/caras-ref.png"
-                                            alt="Tabla peso minimo ASTM D5821"
-                                            className="w-[170px] border border-[#4b4b4b] bg-white"
-                                        />
-                                    </div>
+                                <div className="flex justify-center pb-3">
+                                    <img
+                                        src="/caras-ref.png"
+                                        alt="Tabla peso minimo ASTM D5821"
+                                        className="w-[260px] md:w-[300px] border border-[#4b4b4b] bg-white"
+                                    />
                                 </div>
                             </div>
                         </div>
