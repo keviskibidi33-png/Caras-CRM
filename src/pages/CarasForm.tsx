@@ -378,10 +378,10 @@ export default function CarasForm() {
                         </div>
 
                         <div className="grid grid-cols-4 border-b border-[#4b4b4b]">
-                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('muestra', 'Muestra')}</div>
-                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('numero_ot', 'N° OT')}</div>
-                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('fecha_ensayo', 'DD/MM/AA', '', () => setField('fecha_ensayo', normalizeFlexibleDate(String(form.fecha_ensayo ?? ''))))}</div>
-                            <div className="p-1">{renderTextInput('realizado_por', 'Realizado por')}</div>
+                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('muestra', 'Muestra', 'text-center')}</div>
+                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('numero_ot', 'N° OT', 'text-center')}</div>
+                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('fecha_ensayo', 'DD/MM/AA', 'text-center', () => setField('fecha_ensayo', normalizeFlexibleDate(String(form.fecha_ensayo ?? ''))))}</div>
+                            <div className="p-1">{renderTextInput('realizado_por', 'Realizado por', 'text-center')}</div>
                         </div>
 
                         <div className="border-b border-[#4b4b4b] bg-[#f4f4f4] px-2 py-1 text-center">
