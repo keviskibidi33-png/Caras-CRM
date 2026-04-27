@@ -380,7 +380,7 @@ export default function CarasForm() {
                         <div className="grid grid-cols-4 border-b border-[#4b4b4b]">
                             <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('muestra', 'Muestra', 'text-center')}</div>
                             <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('numero_ot', 'N° OT', 'text-center')}</div>
-                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('fecha_ensayo', 'DD/MM/AA', 'text-center', () => setField('fecha_ensayo', normalizeFlexibleDate(String(form.fecha_ensayo ?? ''))))}</div>
+                            <div className="border-r border-[#4b4b4b] p-1">{renderTextInput('fecha_ensayo', 'YYYY/MM/DD', 'text-center', () => setField('fecha_ensayo', normalizeFlexibleDate(String(form.fecha_ensayo ?? ''))))}</div>
                             <div className="p-1">{renderTextInput('realizado_por', 'Realizado por', 'text-center')}</div>
                         </div>
 
@@ -612,13 +612,13 @@ export default function CarasForm() {
                                 <p className="mb-1 text-[12px] font-semibold">Revisado:</p>
                                 <div className="mb-1">{renderSelect('revisado_por', REVISADO)}</div>
                                 <p className="mb-1 text-[12px] font-semibold">Fecha:</p>
-                                {renderTextInput('revisado_fecha', 'DD/MM/AA', '', () => setField('revisado_fecha', normalizeFlexibleDate(String(form.revisado_fecha ?? ''))))}
+                                {renderTextInput('revisado_fecha', 'YYYY/MM/DD', '', () => setField('revisado_fecha', normalizeFlexibleDate(String(form.revisado_fecha ?? ''))))}
                             </div>
                             <div className="border border-[#4b4b4b] p-2">
                                 <p className="mb-1 text-[12px] font-semibold">Aprobado:</p>
                                 <div className="mb-1">{renderSelect('aprobado_por', APROBADO)}</div>
                                 <p className="mb-1 text-[12px] font-semibold">Fecha:</p>
-                                {renderTextInput('aprobado_fecha', 'DD/MM/AA', '', () => setField('aprobado_fecha', normalizeFlexibleDate(String(form.aprobado_fecha ?? ''))))}
+                                {renderTextInput('aprobado_fecha', 'YYYY/MM/DD', '', () => setField('aprobado_fecha', normalizeFlexibleDate(String(form.aprobado_fecha ?? ''))))}
                             </div>
                         </div>
 
