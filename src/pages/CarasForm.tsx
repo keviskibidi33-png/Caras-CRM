@@ -37,7 +37,7 @@ const NOTE_3 =
 const NOTE_4 = '(****) Dato registrado solo para metodo fraccionado.'
 const formatTodayShortDate = () => {
     const [yyyy = '', mm = '', dd = ''] = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Lima' }).split('-')
-    return `${dd}/${mm}/${yyyy.slice(-2)}`
+    return `${yyyy}/${mm}/${dd}`
 }
 const getCurrentYearShort = () => new Date().getFullYear().toString().slice(-2)
 const normalizeFlexibleDate = (raw: string): string => {
