@@ -22,7 +22,7 @@ const buildFormatPreview = (sampleCode: string | undefined, materialCode: 'SU' |
 const DRAFT_KEY = 'caras_form_draft_v1'
 const DEBOUNCE_MS = 700
 
-const EQ_HORNO = ['-', 'EQP-0150'] as const
+const EQ_HORNO = ['-', 'EQP-0150', 'EQP-0049'] as const
 const EQ_BALANZA = ['-', 'EQP-0046'] as const
 const EQ_TAMIZ = ['-', 'INS-0053', 'INS-0053 y INS-0052'] as const
 const EQ_CUARTEADOR = ['-', 'EQP-0078'] as const
